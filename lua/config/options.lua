@@ -23,3 +23,5 @@ vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80"
 
 vim.opt.smartindent = true
+
+vim.opt.conceallevel = 2
