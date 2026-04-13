@@ -14,7 +14,7 @@ return {
 
             -- opzionale: snippet custom LaTeX
             require("luasnip.loaders.from_lua").load({
-                paths = "~/.config/nvim/lua/snippets",
+                paths = "~/.config/nvim/lua/snippets/",
             })
         end,
     },
