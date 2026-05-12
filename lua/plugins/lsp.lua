@@ -25,24 +25,39 @@ return {
         -- We just need to tell Neovim how to configure and attach them.
 
         vim.lsp.config("clangd", {
+            -- 1. Explicitly tell Neovim what binary to run
+            cmd = { "clangd", "--background-index" },
+            
+            -- 2. Explicitly tell Neovim which files trigger this server
+            filetypes = { "c", "cpp", "objc", "objcpp" },
+            
+            -- 3. Define the workspace root (needs at least one of these to exist!)
             root_markers = { "compile_commands.json", "compile_flags.txt", ".git" },
         })
 
-        vim.lsp.config("zls", {
-            root_markers = { "build.zig", "zls.json", ".git" },
-            settings = {
-                zls = { enable_inlay_hints = true, enable_snippets = true, warn_style = true }
-            }
-        })
-
         vim.lsp.config("lua_ls", {
-            root_markers = { ".luarc.json", ".git" },
+            -- 1. Explicitly tell Neovim what binary to run
+            cmd = { "lua-language-server" },
+            
+            -- 2. Explicitly tell Neovim which files trigger this server
+            filetypes = { "lua" },
+            
+            -- 3. Add "init.lua" or "lazy-lock.json" so it detects your Neovim config directory!
+            root_markers = { ".luarc.json", ".git", "lazy-lock.json", "init.lua" },
+            
             settings = {
                 Lua = {
                     runtime = { version = "LuaJIT" },
                     diagnostics = { globals = { "vim" } },
-                    workspace = { library = vim.api.nvim_get_runtime_file("", true), checkThirdParty = false },
-                    format = { enable = true, defaultConfig = { indent_style = "space", indent_size = "2" } },
+                    workspace = { 
+                        library = vim.api.nvim_get_runtime_file("", true), 
+                        checkThirdParty = false 
+                    },
+                    -- Native formatting enabled
+                    format = { 
+                        enable = true, 
+                        defaultConfig = { indent_style = "space", indent_size = "4" } 
+                    },
                 }
             }
         })
