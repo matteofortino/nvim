@@ -25,3 +25,5 @@ vim.opt.colorcolumn = "80"
 vim.opt.smartindent = true
 
 vim.opt.conceallevel = 2
+
+vim.env.PATH = "/opt/homebrew/bin:" .. vim.env.PATH
