@@ -1,74 +1,41 @@
 return {
     "williamboman/mason.nvim",
     dependencies = {
-        -- We keep mason-lspconfig strictly to auto-install your tools
-        -- and auto-enable them in the new 0.12 native API.
         "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig", -- We need this back for the default server configurations!
     },
     config = function()
         -- =====================================================================
-        -- 1. MASON BINARY MANAGEMENT
+        -- 1. MASON & AUTOMATIC LSP ROUTING
         -- =====================================================================
         require("mason").setup()
 
         require("mason-lspconfig").setup({
-            ensure_installed = { "lua_ls", "clangd", "zls", "tailwindcss" },
-            -- In Neovim 0.12+, mason-lspconfig can automatically run
-            -- vim.lsp.enable() for your installed servers.
-            automatic_enable = true,
-        })
+            ensure_installed = { "lua_ls", "clangd" }, -- Add servers you always want here
 
-        -- =====================================================================
-        -- 2. NATIVE LSP CONFIGURATIONS (No nvim-lspconfig needed)
-        -- =====================================================================
-        -- Mason put the binaries in your PATH, so native Neovim can launch them.
-        -- We just need to tell Neovim how to configure and attach them.
+            -- This is the magic block. It automatically takes ANY server you install
+            -- in Mason and sets it up using the correct default commands/filetypes.
+            handlers = {
+                function(server_name)
+                    require("lspconfig")[server_name].setup({})
+                end,
 
-        vim.lsp.config("clangd", {
-            -- 1. Explicitly tell Neovim what binary to run
-            cmd = { "clangd", "--background-index" },
-            
-            -- 2. Explicitly tell Neovim which files trigger this server
-            filetypes = { "c", "cpp", "objc", "objcpp" },
-            
-            -- 3. Define the workspace root (needs at least one of these to exist!)
-            root_markers = { "compile_commands.json", "compile_flags.txt", ".git" },
-        })
-
-        vim.lsp.config("lua_ls", {
-            -- 1. Explicitly tell Neovim what binary to run
-            cmd = { "lua-language-server" },
-            
-            -- 2. Explicitly tell Neovim which files trigger this server
-            filetypes = { "lua" },
-            
-            -- 3. Add "init.lua" or "lazy-lock.json" so it detects your Neovim config directory!
-            root_markers = { ".luarc.json", ".git", "lazy-lock.json", "init.lua" },
-            
-            settings = {
-                Lua = {
-                    runtime = { version = "LuaJIT" },
-                    diagnostics = { globals = { "vim" } },
-                    workspace = { 
-                        library = vim.api.nvim_get_runtime_file("", true), 
-                        checkThirdParty = false 
-                    },
-                    -- Native formatting enabled
-                    format = { 
-                        enable = true, 
-                        defaultConfig = { indent_style = "space", indent_size = "4" } 
-                    },
-                }
+                -- You can still override specific servers if you want custom settings
+                ["lua_ls"] = function()
+                    require("lspconfig").lua_ls.setup({
+                        settings = {
+                            Lua = {
+                                diagnostics = { globals = { "vim" } },
+                                format = { enable = true, defaultConfig = { indent_style = "space", indent_size = "4" } },
+                            }
+                        }
+                    })
+                end,
             }
         })
 
-        vim.lsp.config("tailwindcss", {
-            root_markers = { "tailwind.config.js", "tailwind.config.ts", ".git" },
-            filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte", "heex" }
-        })
-
         -- =====================================================================
-        -- 3. INLINE DIAGNOSTICS
+        -- 2. INLINE DIAGNOSTICS (Native 0.12)
         -- =====================================================================
         vim.diagnostic.config({
             virtual_text = { prefix = "●", spacing = 2 },
@@ -79,7 +46,7 @@ return {
         })
 
         -- =====================================================================
-        -- 4. NATIVE AUTO-COMPLETION
+        -- 3. NATIVE AUTO-COMPLETION (Native 0.12)
         -- =====================================================================
         vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
@@ -102,7 +69,7 @@ return {
         vim.keymap.set("i", "<CR>", function() return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>" end, { expr = true })
 
         -- =====================================================================
-        -- 5. KEYMAPS & FORMAT-ON-SAVE
+        -- 4. KEYMAPS & FORMAT-ON-SAVE (Native 0.12)
         -- =====================================================================
         vim.api.nvim_create_autocmd("LspAttach", {
             callback = function(args)
@@ -117,7 +84,7 @@ return {
                 vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
 
                 -- Native format on save
-                if client.supports_method("textDocument/formatting") then
+                if client and client.supports_method("textDocument/formatting") then
                     vim.api.nvim_create_autocmd("BufWritePre", {
                         buffer = bufnr,
                         callback = function()
