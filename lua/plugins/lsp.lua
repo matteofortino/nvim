@@ -41,7 +41,7 @@ return {
             virtual_text = { prefix = "●", spacing = 2 },
             signs = true,
             underline = true,
-            update_in_insert = true, -- Real-time errors as you type
+            --update_in_insert = true, -- Real-time errors as you type
             severity_sort = true,
         })
 
