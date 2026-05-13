@@ -53,7 +53,12 @@ return {
         -- Trigger completion natively on every valid keystroke
         vim.api.nvim_create_autocmd("InsertCharPre", {
             callback = function()
-                if vim.fn.pumvisible() == 0 and vim.v.char:match("[%w%.%:%/%-]") then
+                -- Check 1: Is the popup menu already visible?
+                -- Check 2: Does the character match our trigger pattern?
+                -- Check 3: Does the buffer have an omnifunc set? (This prevents the Oil.nvim error)
+                if vim.fn.pumvisible() == 0
+                    and vim.v.char:match("[%w%.%:%/%-]")
+                    and vim.bo.omnifunc ~= "" then
                     vim.schedule(function()
                         vim.fn.feedkeys(vim.api.nvim_replace_termcodes("<C-x><C-o>", true, false, true), "n")
                     end)
