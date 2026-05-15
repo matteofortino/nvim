@@ -67,11 +67,31 @@ return {
         })
 
         -- Map Tab and Enter to navigate the native popup menu
-        vim.keymap.set("i", "<Tab>", function() return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>" end,
+        -- Upgraded Tab: Menu navigation OR Snippet jumping
+        vim.keymap.set({ "i", "s" }, "<Tab>", function()
+            if vim.fn.pumvisible() == 1 then
+                return "<C-n>"                            -- Go down the menu
+            elseif vim.snippet.active({ direction = 1 }) then
+                return "<cmd>lua vim.snippet.jump(1)<CR>" -- Jump forward in snippet
+            else
+                return "<Tab>"                            -- Regular tab
+            end
+        end, { expr = true, silent = true })
+
+        -- Upgraded Shift-Tab: Menu navigation OR Snippet jumping
+        vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+            if vim.fn.pumvisible() == 1 then
+                return "<C-p>"                             -- Go up the menu
+            elseif vim.snippet.active({ direction = -1 }) then
+                return "<cmd>lua vim.snippet.jump(-1)<CR>" -- Jump backward in snippet
+            else
+                return "<S-Tab>"
+            end
+        end, { expr = true, silent = true })
+
+        -- (Keep your Enter keymap exactly as we set it earlier)
+        vim.keymap.set("i", "<S-CR>", function() return vim.fn.pumvisible() == 1 and "<C-y>" or "<S-CR>" end,
             { expr = true })
-        vim.keymap.set("i", "<S-Tab>", function() return vim.fn.pumvisible() == 1 and "<C-p>" or "<S-Tab>" end,
-            { expr = true })
-        vim.keymap.set("i", "<CR>", function() return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>" end, { expr = true })
 
         -- =====================================================================
         -- 4. KEYMAPS & FORMAT-ON-SAVE (Native 0.12)
