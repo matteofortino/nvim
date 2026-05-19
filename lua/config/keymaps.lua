@@ -5,7 +5,15 @@ vim.keymap.set("n", "<C-n>", ":Oil<CR>", { desc = "Open file explorer" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
-vim.keymap.set("n", "<leader>p", ":Bufferin<CR>")
+vim.keymap.set("n", "<leader>p", ":Bufferin<CR>", { desc = "Show active buffers" })
+
+vim.keymap.set("i", "<C-CR>", "<C-y>", { desc = "accept autocompletition" })
+
+
+vim.keymap.set("n", "{", "{zz")
+vim.keymap.set("n", "}", "}zz")
+
+-- Lettere accentate
 vim.keymap.set("i", ";;a", "à")
 vim.keymap.set("i", ";;e", "è")
 vim.keymap.set("i", ";;i", "ì")
