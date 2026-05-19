@@ -24,6 +24,8 @@ vim.opt.colorcolumn = "80"
 
 vim.opt.smartindent = true
 
-vim.opt.conceallevel = 2
+vim.o.autocomplete = true
+vim.opt.complete:append('o')
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
-vim.env.PATH = "/opt/homebrew/bin:" .. vim.env.PATH
+vim.o.pumheight = 20
