@@ -7,9 +7,6 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>p", ":Bufferin<CR>", { desc = "Show active buffers" })
 
-vim.keymap.set("i", "<C-CR>", "<C-y>", { desc = "accept autocompletition" })
-
-
 vim.keymap.set("n", "{", "{zz")
 vim.keymap.set("n", "}", "}zz")
 
