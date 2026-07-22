@@ -8,7 +8,6 @@ return {
     config = function()
         vim.keymap.set("i", "<C-CR>", "<C-y>", { desc = "accept autocompletition" })
 
-
         -- inline errors
         vim.diagnostic.config({
             virtual_text = { prefix = "●", spacing = 2 },
@@ -24,62 +23,50 @@ return {
                 "lua_ls",
                 "clangd",
                 "basedpyright",
-            }
+            },
         })
-        -- 1. Ask Neovim to physically search upwards for the .venv folder on startup
-        local python_path = vim.fn.exepath("python") or "python"
-        local venv_match = vim.fs.find('.venv', { upward = true, type = 'directory' })[1]
 
-        if venv_match then
-            python_path = venv_match .. '/bin/python'
-        elseif vim.env.VIRTUAL_ENV then
-            python_path = vim.env.VIRTUAL_ENV .. '/bin/python'
-        end
-
-        -- 2. Pass this statically into the config. No complex hooks.
-        vim.lsp.config('basedpyright', {
-            cmd = { 'basedpyright-langserver', '--stdio' },
-            root_markers = { 'uv.lock', 'pyproject.toml', '.venv' },
-
+        vim.lsp.config("basedpyright", {
             settings = {
-                python = {
-                    -- This hardcodes the exact absolute path to your uv python binary
-                    pythonPath = python_path,
-                },
                 basedpyright = {
                     analysis = {
-                        autoSearchPaths = true,
-                        useLibraryCodeForTypes = true,
-                        diagnosticMode = "openFilesOnly",
-                        typeCheckingMode = "standard",
-                        reportMissingTypeStubs = false, -- Skips the sklearn stub errors
+                        typeCheckingMode = "basic",
+                        diagnosticSeverityOverrides = {
+                            reportAny = "none",
+                            reportUnknownMemberType = "none",
+                            reportUnknownVariableType = "none",
+                            reportUnknownArgumentType = "none",
+                            reportAttributeAccessIssue = "none",
+                        },
                     },
                 },
             },
         })
 
-        vim.lsp.enable('basedpyright')
+        vim.lsp.enable("basedpyright")
+        -- Enable the server so it attaches to Python files
+        vim.lsp.enable("basedpyright")
         vim.lsp.enable("lua_ls")
         vim.lsp.enable("clangd")
-        vim.lsp.enable("basedpyright")
 
-
-        vim.api.nvim_create_autocmd('LspAttach', {
-            group = vim.api.nvim_create_augroup('my.lsp', {}),
+        vim.api.nvim_create_autocmd("LspAttach", {
+            group = vim.api.nvim_create_augroup("my.lsp", {}),
             callback = function(ev)
                 local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
 
                 -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
-                if client:supports_method('textDocument/completion') then
+                if client:supports_method("textDocument/completion") then
                     vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
                 end
 
                 -- Auto-format ("lint") on save.
                 -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
-                if not client:supports_method('textDocument/willSaveWaitUntil')
-                    and client:supports_method('textDocument/formatting') then
-                    vim.api.nvim_create_autocmd('BufWritePre', {
-                        group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+                if
+                    not client:supports_method("textDocument/willSaveWaitUntil")
+                    and client:supports_method("textDocument/formatting")
+                then
+                    vim.api.nvim_create_autocmd("BufWritePre", {
+                        group = vim.api.nvim_create_augroup("my.lsp", { clear = false }),
                         buffer = ev.buf,
                         callback = function()
                             vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
@@ -88,8 +75,7 @@ return {
                 end
             end,
         })
-    end
-
+    end,
 }
 --return {
 --    "williamboman/mason.nvim",
