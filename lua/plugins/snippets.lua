@@ -21,10 +21,6 @@ return {
 					stop = "<C-c>", -- Stop snippet session
 				},
 			})
-
-			-- Starts an in-process LSP server so your autocompletion plugin
-			-- (nvim-cmp, blink.cmp, mini.completion, etc.) displays snippets automatically
-			mini_snippets.start_lsp_server()
 		end,
 	},
 }
