@@ -6,10 +6,6 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
-vim.keymap.set("i", "<CR>", function()
-	return vim.fn.pumvisible() ~= 0 and "<C-y>" or "<CR>"
-end, { expr = true, replace_keycodes = true })
-
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
@@ -26,9 +22,6 @@ vim.opt.signcolumn = "yes"
 
 vim.opt.colorcolumn = "80"
 
-vim.opt.smartindent = true
-
-vim.o.autocomplete = true
 vim.opt.complete:append("o")
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
