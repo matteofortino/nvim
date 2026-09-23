@@ -1,0 +1,24 @@
+{
+    "Basic LaTeX notes structure": {
+        "prefix": "tex",
+        "description": "Basic single lecture LaTeX note-taking structure (Matteo Fortino, University of Pisa)",
+        "body": [
+            "\\documentclass[11pt,a4paper]{article}",
+            "",
+            "\\usepackage[utf8]{inputenc}",
+            "\\usepackage[T1]{fontenc}",
+            "\\usepackage[english]{babel}",
+            "\\usepackage{amsmath,amssymb,amsfonts}",
+            "\\usepackage{graphicx}",
+            "\\usepackage[a4paper,margin=2.5cm]{geometry}",
+            "\\usepackage{enumitem}",
+            "\\usepackage{hyperref}",
+            "\\begin{document}",
+            "\\section{${2:Introduction}}",
+            "",
+            "${0}",
+            "",
+            "\\end{document}"
+        ]
+    }
+}

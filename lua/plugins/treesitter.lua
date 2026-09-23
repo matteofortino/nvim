@@ -20,6 +20,7 @@ return {
         "yaml",
         "markdown",
         "markdown_inline",
+        "latex",
         "python",
         "go",
         "rust",

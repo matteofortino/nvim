@@ -26,3 +26,5 @@ vim.opt.complete:append("o")
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 vim.o.pumheight = 20
+
+vim.opt.conceallevel = 2

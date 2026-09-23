@@ -1,0 +1,33 @@
+{
+    "Basic LaTeX notes structure": {
+        "prefix": "master_tex",
+        "description": "Basic LaTeX note-taking structure (Matteo Fortino, University of Pisa)",
+        "body": [
+            "\\documentclass[11pt,a4paper]{article}",
+            "",
+            "\\usepackage[utf8]{inputenc}",
+            "\\usepackage[T1]{fontenc}",
+            "\\usepackage[english]{babel}",
+            "\\usepackage{amsmath,amssymb,amsfonts}",
+            "\\usepackage{graphicx}",
+            "\\usepackage[a4paper,margin=2.5cm]{geometry}",
+            "\\usepackage{enumitem}",
+            "\\usepackage{hyperref}",
+            "",
+            "\\title{${1:Course Notes}}",
+            "\\author{Matteo Fortino \\\\ University of Pisa}",
+            "\\date{\\today}",
+            "",
+            "\\begin{document}",
+            "",
+            "\\maketitle",
+            "\\tableofcontents",
+            "",
+            "\\section{${2:Introduction}}",
+            "",
+            "${0}",
+            "",
+            "\\end{document}"
+        ]
+    }
+}
