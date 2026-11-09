@@ -73,6 +73,21 @@ return {
 			callback = function(ev)
 				local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
 
+				-- Show available LSP docs in a readable Markdown float.
+				if client:supports_method("textDocument/hover") then
+					vim.keymap.set("n", "K", function()
+						vim.lsp.buf.hover({
+							border = "rounded",
+							max_width = 100,
+							max_height = 35,
+							wrap = true,
+							focusable = true,
+							title = " Documentation ",
+							title_pos = "center",
+						})
+					end, { buffer = ev.buf, desc = "LSP: Show documentation" })
+				end
+
 				-- Auto-format ("lint") on save.
 				-- Usually not needed if server supports "textDocument/willSaveWaitUntil".
 				if

@@ -27,4 +27,7 @@ vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 vim.o.pumheight = 20
 
-vim.opt.conceallevel = 2
+vim.opt.conceallevel = 0
+
+-- Don't create swap files or show swap-file recovery prompts.
+vim.opt.swapfile = false
